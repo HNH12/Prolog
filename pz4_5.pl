@@ -173,6 +173,17 @@ common_word(Q,[H|T],B,ML,[],Max,LM,A):-H>=32,H=<64,common_word(Q,T,B,ML,[],Max,L
 common_word(Q,[H|T],B,ML,C,Max,LM,A):-H>=32,H=<64,repeat_word(Q,A,C,C,0,K,1),(K>Max->common_word(Q,T,B,C,[],K,LM,A);common_word(Q,T,B,ML,[],Max,LM,A)),!.
 common_word(Q,[H|T],B,ML,C,Max,LM,A):-append(C,[H],C1),common_word(Q,T,B,ML,C1,Max,LM,A).
 
+% Выводит в файл строки, состоящие из уникальных слов в исходном файле;
+pr10:-see('C.txt'),tell('Ch.txt'),read_str_str(A),unique_str(A),told,seen.
+unique_str([H|T]):-unique_str([H|T],[H|T],H,[],H,0,H).
+unique_str(_,[],[],[],_,_,_):-!.
+unique_str(Text,[_|T],[],[],A,0,Current_str):-write_str(Current_str),nl,first_elem(T,EL),unique_str(Text,T,EL,[],A,0,EL),!.
+unique_str(Text,[_|T],[],[],A,1,_):-first_elem(T,EL),unique_str(Text,T,EL,[],A,0,EL),!.
+unique_str(Text,B,[],C,A,_,CS):-repeat_word(Text,A,C,C,0,K,1),(K>1->unique_str(Text,B,[],[],A,1,CS);unique_str(Text,B,[],[],A,0,CS)),!.
+unique_str(Text,Current_text,[H|T],[],A,_,CS):-H>=32,H=<64,unique_str(Text,Current_text,T,[],A,_,CS),!.
+unique_str(Text,Current_text,[H|T],C,A,_,CS):-H>=32,H=<64,repeat_word(Text,A,C,C,0,K,1),(K>1->unique_str(Text,Current_text,[],[],A,1,CS);unique_str(Text,Current_text,T,[],A,0,CS)),!.
+unique_str(Text,Current_text,[H|T],C,A,_,CS):-append(C,[H],C1),unique_str(Text,Current_text,T,C1,A,_,CS).
+
 
 %Показать третий, шестой и так далее символы;
 pr11:-read_str(A,_),show(A,[],B,1),write_str(B).
