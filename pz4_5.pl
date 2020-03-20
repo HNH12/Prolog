@@ -180,7 +180,7 @@ unique_str(_,[],[],[],_,_,_):-!.
 unique_str(Text,[_|T],[],[],A,0,Current_str):-write_str(Current_str),nl,first_elem(T,EL),unique_str(Text,T,EL,[],A,0,EL),!.
 unique_str(Text,[_|T],[],[],A,1,_):-first_elem(T,EL),unique_str(Text,T,EL,[],A,0,EL),!.
 unique_str(Text,B,[],C,A,_,CS):-repeat_word(Text,A,C,C,0,K,1),(K>1->unique_str(Text,B,[],[],A,1,CS);unique_str(Text,B,[],[],A,0,CS)),!.
-unique_str(Text,Current_text,[H|T],[],A,_,CS):-H>=32,H=<64,unique_str(Text,Current_text,T,[],A,_,CS),!.
+unique_str(Text,Current_text,[H|T],[],A,_,CS):-H>=32,H=<64,unique_str(Text,Current_text,T,[],A,1,CS),!.
 unique_str(Text,Current_text,[H|T],C,A,_,CS):-H>=32,H=<64,repeat_word(Text,A,C,C,0,K,1),(K>1->unique_str(Text,Current_text,[],[],A,1,CS);unique_str(Text,Current_text,T,[],A,0,CS)),!.
 unique_str(Text,Current_text,[H|T],C,A,_,CS):-append(C,[H],C1),unique_str(Text,Current_text,T,C1,A,_,CS).
 
