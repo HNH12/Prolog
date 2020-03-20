@@ -1,4 +1,5 @@
 %Произвденеие элементов списка;
+%asfasf
 pr_list(A,Pr):-pr_list(A,Pr,1).
 pr_list([],Pr,Pr):-!.
 pr_list([H|T],Pr,P):-P1 is P*H,pr_list(T,Pr,P1).
