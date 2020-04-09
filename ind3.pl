@@ -48,7 +48,7 @@ push_stek_symb(A,B,[],0):-A<0,A1 is A*(-1),push_stek_symb(A1,B,[],1),!.
 push_stek_symb(A,B,C,Flag):-R is A mod 10,A1 is A div 10, append_to_begin(C,R,[],NewC,1),
     push_stek_symb(A1,B,NewC,Flag),!.
 
-example:-read_str(A,_),polsk(A,B,[],[],1),solution_polsk(B,[],[],Answer,0),
+example:-read_str(A,_),polsk(A,B,[],[],0),solution_polsk(B,[],[],Answer,0),
     write_str(B),nl,write(Answer).
 
 solution_polsk([],_,Stek,A,_):-last_elem_stek(Stek,El),numb(El,Numb,0,1,0),A is Numb,!.
@@ -85,22 +85,24 @@ polsk([],B,Out,[H|T],1):-append(Out,[46],NewOut),last_elem_stek([H|T],LastElem),
 polsk([],B,Out,[H|T],0):-last_elem_stek([H|T],LastElem),append(Out,[LastElem],NewOut),
     pop_stek([H|T],NewStek,[]),polsk([],B,NewOut,NewStek,0),!.
 
-polsk([H|T],B,Out,[],1):-priority(P,H),P\=0,
-    append(Out,[46],NewOut),append([],[H],NewStek),polsk(T,B,NewOut,NewStek,0),!.
+polsk([H|T],B,Out,Stek,0):-H=40,append(Stek,[H],NewStek),polsk(T,B,Out,NewStek,0),!.
 
-polsk([H|T],B,Out,[],0):-priority(P,H),P\=0,
-    append([],[H],NewStek),polsk(T,B,Out,NewStek,0),!.
+polsk([H|T],B,Out,Stek,Flag):-H=41,(Flag=1->append(Out,[46],NewOut);NewOut=Out),
+    last_elem_stek(Stek,El),
+    (El\=40->
+         append(NewOut,[El],FinalNewOut),pop_stek(Stek,NewStek,[]),polsk([H|T],B,FinalNewOut,NewStek,0);
+         pop_stek(Stek,NewStek,[]),polsk(T,B,NewOut,NewStek,0)),!.
 
 polsk([H|T],B,Out,Stek,1):-priority(P,H),P\=0,last_elem_stek(Stek,LastElem),
     priority(P2,LastElem),P=<P2,
-    pop_stek(Stek,PopStek,[]),last_elem_stek(PopStek,El),priority(P3,El),P3>P,
+    pop_stek(Stek,PopStek,[]),last_elem_stek(PopStek,El),priority(P3,El),P3>=P,
     append(Out,[46],OutPoint),append(OutPoint,[LastElem],NewOut),
     append(NewOut,[El],FinalNewOut),pop_stek(PopStek,FinalPopStek,[]),
     append(FinalPopStek,[H],NewStek),polsk(T,B,FinalNewOut,NewStek,0),!.
 
 polsk([H|T],B,Out,Stek,0):-priority(P,H),P\=0,last_elem_stek(Stek,LastElem),
     priority(P2,LastElem),P=<P2,
-    pop_stek(Stek,PopStek,[]),last_elem_stek(PopStek,El),priority(P3,El),P3>P,
+    pop_stek(Stek,PopStek,[]),last_elem_stek(PopStek,El),priority(P3,El),P3>=P,
     append(Out,[LastElem],NewOut),
     pop_stek(PopStek,FinalPopStek,[]),append(FinalPopStek,[H],NewStek),polsk(T,B,NewOut,NewStek,0),!.
 
