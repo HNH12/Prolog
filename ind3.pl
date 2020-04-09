@@ -69,7 +69,7 @@ solution_polsk([H|T],_,StekNumb,Answer,CurrentAnswer):-
     push_stek_symb(NewCurrentAnswer,NewNumb,[],0),append(FinalNewStekNumb,[NewNumb],AbsFinalNewStekNumb),
     solution_polsk(T,[],AbsFinalNewStekNumb,Answer,FinalNewCurrentAnswer).
 
-priority(2,43):-!.
+priority(1,43):-!.
 priority(2,45):-!.
 priority(3,42):-!.
 priority(3,47):-!.
@@ -90,6 +90,19 @@ polsk([H|T],B,Out,[],1):-priority(P,H),P\=0,
 
 polsk([H|T],B,Out,[],0):-priority(P,H),P\=0,
     append([],[H],NewStek),polsk(T,B,Out,NewStek,0),!.
+
+polsk([H|T],B,Out,Stek,1):-priority(P,H),P\=0,last_elem_stek(Stek,LastElem),
+    priority(P2,LastElem),P=<P2,
+    pop_stek(Stek,PopStek,[]),last_elem_stek(PopStek,El),priority(P3,El),P3>P,
+    append(Out,[46],OutPoint),append(OutPoint,[LastElem],NewOut),
+    append(NewOut,[El],FinalNewOut),pop_stek(PopStek,FinalPopStek,[]),
+    append(FinalPopStek,[H],NewStek),polsk(T,B,FinalNewOut,NewStek,0),!.
+
+polsk([H|T],B,Out,Stek,0):-priority(P,H),P\=0,last_elem_stek(Stek,LastElem),
+    priority(P2,LastElem),P=<P2,
+    pop_stek(Stek,PopStek,[]),last_elem_stek(PopStek,El),priority(P3,El),P3>P,
+    append(Out,[LastElem],NewOut),
+    pop_stek(PopStek,FinalPopStek,[]),append(FinalPopStek,[H],NewStek),polsk(T,B,NewOut,NewStek,0),!.
 
 polsk([H|T],B,Out,Stek,1):-priority(P,H),P\=0,last_elem_stek(Stek,LastElem),
     priority(P2,LastElem),P=<P2,append(Out,[46],OutPoint),append(OutPoint,[LastElem],NewOut),
