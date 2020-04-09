@@ -2,9 +2,21 @@ read_word(A):-get0(X),r_w(X,A,[]).
 r_w(32,A,A):-!.
 r_w(X,A,B):-append(B,[X],B1),get0(X1),r_w(X1,A,B1).
 
-read_str(A,N):-get0(X),r_str(X,A,[],N,0).
-r_str(10,A,A,N,N):-!.
-r_str(X,A,B,N,K):-K1 is K+1,append(B,[X],B1),get0(X1),r_str(X1,A,B1,N,K1).
+read_str_str(A):-read_str_file(B,Flag),read_str_str(A,[B],Flag).
+read_str_str(A,A,-1):-!.
+read_str_str(A,Temp_list,10):-read_str_file(B,Flag),append(Temp_list,[B],T_L),
+read_str_str(A,T_L,Flag).
+
+read_str_file(A,Flag):-get0(X),r_str(X,A,[],Flag).
+r_str(10,A,A,10):-!.
+r_str(-1,A,A,-1):-!.
+r_str(X,A,B,Flag):-append(B,[X],B1),get0(X1),r_str(X1,A,B1,Flag).
+
+polsk_notacia_file:-see('PolskNotacia.txt'),read_str_str(A),seen,pn(A).
+
+pn([]):-!.
+pn([H|T]):-polsk(H,B,[],[],0),solution_polsk(B,[],[],Answer,0),
+    write_str(B),nl,write(Answer),nl,pn(T).
 
 write_str([]):-!.
 write_str([H|T]):-put(H),write_str(T).
@@ -47,9 +59,6 @@ push_stek_symb(0,B,C,1):-append_to_begin_symb(C,45,C1,[],0),push_stek_symb(0,B,C
 push_stek_symb(A,B,[],0):-A<0,A1 is A*(-1),push_stek_symb(A1,B,[],1),!.
 push_stek_symb(A,B,C,Flag):-R is A mod 10,A1 is A div 10, append_to_begin(C,R,[],NewC,1),
     push_stek_symb(A1,B,NewC,Flag),!.
-
-example:-read_str(A,_),polsk(A,B,[],[],0),solution_polsk(B,[],[],Answer,0),
-    write_str(B),nl,write(Answer).
 
 solution_polsk([],_,Stek,A,_):-last_elem_stek(Stek,El),numb(El,Numb,0,1,0),A is Numb,!.
 
