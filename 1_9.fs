@@ -1,16 +1,8 @@
 ﻿// Learn more about F# at http://fsharp.org
 
-let delit a b =
-    if (a%b=0) then true
-    else false
-
-let rec nod1 a b c =
-    if (delit a c && delit b c) then c
-    else nod1 a b (c-1)
-
-let nod a b =
-    if (a > b) then nod1 a b b
-    else nod1 a b a
+let rec nod a b =
+    if (b = 0) then a
+    else nod b (a%b)
 
 let pr1_9 = 
     System.Console.WriteLine("Введите число")
