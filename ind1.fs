@@ -1,5 +1,4 @@
 ﻿// Learn more about F# at http://fsharp.org
-
 let delit a b =
     if (a%b=0) then false
     else true
@@ -13,22 +12,30 @@ let pr a =
     | 1 -> false
     | _ -> prost a 2
     
-let rec max_count_pr a b n k =
-    match n with
-    | 40 -> k
-    | _ -> let rez = n*n+a*n+b
-           if (pr rez) then max_count_pr a b (n+1) (k+1)
-           else max_count_pr a b (n+1) k
+let max_count_pr a b =
+    let mutable flag = true
+    let mutable cur_a = a
+    let mutable cur_b = b
+    let mutable n = 0
+    while flag do
+        let rez = n*n+a*n+b
+        if (pr rez) then n <- n+1
+        else flag <- false
+    n
 
-let rec mnogochlen a b max_a max_b max_k=
-    match a,b with
-    | 1000, 1000 -> (max_a, max_b, max_k)
-    | _, 1000 -> mnogochlen (a+1) -999 max_a max_b max_k
-    | _,_ -> let count = max_count_pr a b 0 0
-             if (count > max_k) then mnogochlen a (b+1) a b count
-             else mnogochlen a (b+1) max_a max_b max_k
+let mnogochlen =
+    let mutable max_a = 0
+    let mutable max_b = 0
+    let mutable max_k = 0
+    for a in 0..30 do
+        for b in 0..30 do
+            let count = max_count_pr a b
+            if (count > max_k) then max_a <-a
+                                    max_b <-b
+                                    max_k <-count
+    (max_a,max_b,max_k)
 
-let ind1 = mnogochlen -999 -999 -999 -999 0
+let ind1 = mnogochlen
 
 //let rec f a b =
 //    match a,b with
@@ -43,5 +50,4 @@ let main argv =
 
     let answer = ind1
     System.Console.WriteLine(answer)
-
     0 // return an integer exit code
