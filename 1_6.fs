@@ -10,12 +10,11 @@ let rec chains n k =
 let rec max_posled n a k = 
     match n with
     |1000000->(a,k)
-    |_-> let k1 = chains n k 
-         let k2 = chains a k 
-         if (k1 > k2) then max_posled (n+1) n k1
-         else max_posled (n+1) a k2  
+    |_-> let k1 = chains n 0
+         if (k1 > k) then max_posled (n+1) n k1
+         else max_posled (n+1) a k  
 
-let pr1_6 = max_posled 1 1 1
+let pr1_6 = max_posled 13 13 0
 
 [<EntryPoint>]
 let main argv = 
