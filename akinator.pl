@@ -232,6 +232,7 @@ question13(X):-nl,write("Зрительское отношение к персонажу"),nl,
                                 read(X).
 
 question14(X):-nl,write("Дракон или нет?"),nl,
+                                write("4. Не знал, но являлся"),nl,
                                 write("3. Считал себя драконом, но не являлся"),nl,
                                 write("2. Считал и являлся"),nl,
                                 write("1. Строго да"),nl,
@@ -279,13 +280,17 @@ question21(X):-nl,write("Законная наследница Железного Трона,
                                 read(X).
 
 akkinator:-(read_facts->true;true),check.
-check:-
-
-
-
-
-
-
-
-
-
+check:-question1(X1),question2(X2),question3(X3),question4(X4),question5(X5),
+    question6(X6),question7(X7),question8(X8),question9(X9),question10(X10),
+    question11(X11),question12(X12),question13(X13),question14(X14),question15(X15),
+    question16(X16),question17(X17),question18(X18),question19(X19),question20(X20),
+    question21(X21),(q1(X,X1),q2(X,X2),q3(X,X3),q4(X,X4),q5(X,X5),q6(X,X6),q7(X,X7),
+    q8(X,X8),q9(X,X9),q10(X,X10),q11(X,X11),q12(X,X12),q13(X,X13),q14(X,X14),q15(X,X15),
+    q16(X,X16),q17(X,X17),q18(X,X18),q19(X,X19),q20(X,X20),q21(X,X21)->write(X),write_facts;
+                    write("Помогите нам, напишите имя персонажа"),nl,read(X),
+                    asserta(q1(X,X1)),asserta(q2(X,X2)),asserta(q3(X,X3)),asserta(q4(X,X4)),
+                    asserta(q5(X,X5)),asserta(q6(X,X6)),asserta(q7(X,X7)),asserta(q8(X,X8)),
+                    asserta(q9(X,X9)),asserta(q10(X,X10)),asserta(q11(X,X11)),asserta(q12(X,X12)),
+                    asserta(q13(X,X13)),asserta(q14(X,X14)),asserta(q15(X,X15)),asserta(q16(X,X16)),
+                    asserta(q17(X,X17)),asserta(q18(X,X18)),asserta(q19(X,X19)),asserta(q20(X,X20)),
+                    asserta(q21(X,X21)),write_facts).
