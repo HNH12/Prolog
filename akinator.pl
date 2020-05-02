@@ -32,16 +32,17 @@ read_list([H|T],[],X,Y):-append([],H,C),read_list(T,C,X,Y).
 read_list([[H|_]|_],B,X,Y):-B\=[],name(A,[H]),X = A,name(Q,B),Y = Q.
 read_list([_|T],B,X,Y):-B\=[],read_list(T,[],X,Y).
 
-high_read_file:-see('c:/DataBase/high.txt'),read_str_str(A),seen,read_high(A,Y,X),asserta(high(X,Y)).
+high_read_file:-see('c:/DataBase/high.txt'),read_str_str(A),seen,
+    read_high(A,Y,X),asserta(high(X,Y)),A=[].
 read_high(A,X,Y):-read_list(A,[],X,Y).
 
-decl_read_file:-see('c:/DataBase/decl.txt'),read_str_str(A),seen,read_decl(A,Y,X),asserta(decl(X,Y)).
+decl_read_file:-see('c:/DataBase/decl.txt'),read_str_str(A),seen,read_decl(A,Y,X),asserta(decl(X,Y)),A=[].
 read_decl(A,X,Y):-read_list(A,[],X,Y).
 
-oop_read_file:-see('c:/DataBase/oop.txt'),read_str_str(A),seen,read_oop(A,Y,X),asserta(oop(X,Y)).
+oop_read_file:-see('c:/DataBase/oop.txt'),read_str_str(A),seen,read_oop(A,Y,X),asserta(oop(X,Y)),A=[].
 read_oop(A,X,Y):-read_list(A,[],X,Y).
 
-read_facts:-high_read_file,oop_read_file,decl_read_file.
+read_facts:-(high_read_file->true;true),(oop_read_file->true;true),(decl_read_file->true;true).
 write_facts:-high_write_file,oop_write_file,decl_write_file.
 
 question4(X4):-	write("Does your language support OOP?"),nl,
@@ -62,11 +63,12 @@ question2(X2):-	write("Is your language declarative?"),nl,
 				read(X2).
 
 akkinator:-(read_facts->true;true),check.
-check:-question1(X1),question2(X2),question4(X3),
-       (high(X,X1),decl(X,X2),oop(X,X3)->write(X),write_facts;
+check:-question1(X1),question2(X2),question4(X4),
+       (high(X,X1),decl(X,X2),oop(X,X4)->write(X),write_facts;
             write("Помогите нам. Введите правильный ответ."),nl,
             read(X),
-            asserta(high(X,X1)),asserta(decl(X,X2)),asserta(oop(X,X3)),write_facts).
+            asserta(decl(X,X2)),asserta(high(X,X1)),asserta(oop(X,X4)),write_facts).
+
 
 
 
