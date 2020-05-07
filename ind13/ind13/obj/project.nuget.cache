@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "tspSLz3Ra4WBNTqsp26ur+yyUXPMdIZ40+R15XMSNaC9H0bQMNhwByOxtOCbw6GlIdtKbhiTSpO4Q1JAF9u6pQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Илья\\source\\repos\\ind13\\ind13\\ind13.fsproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Илья\\.nuget\\packages\\fsharp.core\\4.7.0\\fsharp.core.4.7.0.nupkg.sha512"
+  ],
+  "logs": []
+}
