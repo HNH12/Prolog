@@ -10,64 +10,68 @@ let rec read_list n =
     Head::Tail
 
 let read_data = 
+    System.Console.WriteLine("Введите длину списка: ")
     let n=System.Convert.ToInt32(System.Console.ReadLine())
+    System.Console.WriteLine("Введите список: ")
     read_list n
 
 let rec write_list list = 
     match list with
-    |[] -> let z = System.Console.ReadKey()
-           0
+    |[] -> 0
     |h::t -> System.Console.WriteLine(h.ToString())
              write_list t
 
-let rec find_repeat el list=
+let rec find_repeat el list count=
     match list with
-    |[] -> 0
-    |head::tail -> if (head = el) then (find_repeat el tail)+1
-                   else find_repeat el tail
+    |[]-> count
+    |head::tail -> if (head = el) then find_repeat el tail (count+1)
+                   else find_repeat el tail count
 
-let rec find_max_repeat list list1 max_el max_repeat=
+let rec find_max_repeat el list const_list max_repeat=
     match list with
-    |[] -> max_el
-    |head::tail -> let count = find_repeat head list1
-                   if (count > max_repeat) then find_max_repeat tail list1 head count
-                   else find_max_repeat tail list1 max_el max_repeat
+    |[]-> el
+    |head::tail -> let repeat = find_repeat head const_list 0
+                   if (repeat > max_repeat) then find_max_repeat head tail const_list repeat
+                   else find_max_repeat el tail const_list max_repeat
 
 let rec append el list =
     match list with
-    |[]-> el
-    |head::tail->let t = append el tail
-                 head::t
+    |[]->[el]
+    |head::tail -> let t = append el tail
+                   head::t
 
-let rec append_all_el el list new_list =
+let rec delete_all el list new_list = 
     match list with
-    |[] -> new_list
-    |head::tail -> if (head = el) then let list1 = append head new_list
-                                       append_all_el el tail list1
-                   else append_all_el el tail new_list
+    |[]->new_list
+    |head::tail -> if (head=el) then delete_all el tail new_list
+                   else delete_all el tail (append head new_list)
 
-let rec new_list_without_el el list=
+let rec take_all_elem el list =
     match list with
     |[] -> []
-    |head::tail -> let t = new_list_without_el el tail
-                   if (head = el) then t
-                   else head::t
+    |head::tail -> let t = take_all_elem el tail
+                   if (head = el) then head::t
+                   else t
 
-let rec form_list list new_list = 
+let rec append_list first_list second_list =
+    match first_list with
+    |[] -> second_list
+    |head::tail -> append_list tail (append head second_list)
+
+let rec form_list list new_list =
     match list with
-    |[] -> new_list
-    |head::tail -> let max_elem = find_max_repeat list list head 0
-                   let b = append_all_el max_elem list new_list
-                   let c = new_list_without_el max_elem list
-                   form_list c b
+    |[]->new_list
+    |head::tail -> let current_max_elem = find_max_repeat head tail tail (find_repeat head list 0)
+                   form_list (delete_all current_max_elem list []) (append_list (take_all_elem current_max_elem list) new_list)
 
-let main_prog list =
+let main_prog list=
     form_list list []
 
 [<EntryPoint>]
 let main argv =
     let list = read_data
     let ans = main_prog list
-    System.Console.WriteLine(ans);
+    System.Console.WriteLine("\nИзмененнный список:")
+    write_list ans
     printfn "Hello World from F#!"
     0 // return an integer exit code
