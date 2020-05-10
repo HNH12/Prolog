@@ -9,9 +9,9 @@ let rec read_list n =
     let tail = read_list(n-1)
     head::tail
 
-let rec read_data =
-    let n = Convert.ToInt32(System.Console.ReadLine())
-    read_list n
+//let rec read_data =
+//    let n = Convert.ToInt32(System.Console.ReadLine())
+//    read_list n
 
 let rec write_list list =
     match list with
@@ -135,10 +135,114 @@ let rec write_list list =
 
 // 13.7
 
+let rec find_max list elem =
+    match list with
+    |[] -> elem
+    |head::tail -> if (head>elem) then find_max tail head
+                   else find_max tail elem
+
+let rec delete_elem list elem =
+    match list with
+    |[] -> []
+    |head::tail -> let t = delete_elem tail elem
+                   if head = elem then t
+                   else head::t
+
+let rec append el list =
+    match list with
+    |[]->[el]
+    |head::tail -> let t = append el tail
+                   head::t
+
+let rec sort_list_A list new_list =
+    match list with
+    |[] -> new_list
+    |head::tail -> let max_elem = find_max list (find_max list head)
+                   sort_list_A (delete_elem list max_elem) (append max_elem new_list)
+
+let rec sum_digit el sum=
+    match el with
+    |0 -> sum
+    |_ -> sum_digit (el/10) (sum+el%10)
+
+let rec find_min_numb list min_numb =
+    match list with
+    |[] -> min_numb
+    |head::tail -> let new_sum = sum_digit (abs(head)) 0
+                   let current_sum = sum_digit (abs(min_numb)) 0
+                   if (new_sum < current_sum) then find_min_numb tail head
+                   else find_min_numb tail min_numb
+
+let rec sort_list_B list new_list =
+    match list with
+    |[] -> new_list
+    |head::tail -> let min_elem = find_min_numb list (find_min_numb list head)
+                   sort_list_B (delete_elem list min_elem) (append min_elem new_list)
+
+let rec count_delit el delit count =
+   match delit=el with
+   |true -> count+1
+   |false -> if (el%delit = 0) then count_delit el (delit+1) (count+1)
+             else count_delit el (delit+1) count
+
+let rec find_max_delit_count list elem =
+    match list with
+    |[] -> elem
+    |head::tail -> let new_count = count_delit (abs(head)) 1 0
+                   let current_count = count_delit (abs(elem)) 1 0
+                   if (new_count > current_count) then find_max_delit_count tail head
+                   else find_max_delit_count tail elem
+
+let rec sort_list_C list new_list = 
+    match list with
+    |[] -> new_list
+    |head::tail -> let max_elem = find_max_delit_count list (find_max_delit_count list head) 
+                   sort_list_C (delete_elem list max_elem) (append max_elem new_list)
+
+let rec elem_index list index i elem =
+    match list, index=i with
+    |_,true -> elem
+    |[],_ -> 0
+    |head::tail,_-> elem_index tail index (i+1) head
+
+let rec first_elem list=
+    match list with
+    |[] -> 0
+    |[head]->head
+    |head::tail -> first_elem tail
+
+let rec form_cortezh f_list s_list t_list new_list i index=
+    if (i=index) 
+    then new_list
+    else    let f_elem_i = elem_index f_list i 0 (first_elem f_list)
+            let s_elem_i = elem_index s_list i 0 (first_elem s_list)
+            let t_elem_i = elem_index t_list i 0 (first_elem t_list)
+            let new_elem_cortezh = append (f_elem_i,s_elem_i,t_elem_i) new_list
+            form_cortezh f_list s_list t_list new_elem_cortezh (i+1) index
+
+
+let max a b =
+    if (a>b) then a
+    else b
+
+let main_prog f_list s_list t_list n =
+    form_cortezh (sort_list_A f_list []) (sort_list_B s_list []) (sort_list_C t_list []) [] 1 (n+1)
 
 [<EntryPoint>]
 let main argv =
-    let list = read_data
-    let ans = main_prog list 
+    printf "Введите длину первого списка: "
+    let n1 = Convert.ToInt32(System.Console.ReadLine());
+    printf "Введите первый список: \n"
+    let f_list = read_list n1
+    printf "Введите длину второго списка: "
+    let n2 = Convert.ToInt32(System.Console.ReadLine());
+    printf "Введите второй список: \n"
+    let s_list = read_list n2
+    printf "Введите длину третьего списка: "
+    let n3 = Convert.ToInt32(System.Console.ReadLine());
+    printf "Введите третий список: \n"
+    let t_list = read_list n3
+    printf "\nИтоговый список:\n"
+    let ans = main_prog f_list s_list t_list (max (max n1 n2) n3)
     write_list ans
     0 // return an integer exit code
