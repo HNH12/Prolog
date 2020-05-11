@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "l2160YCQJgzCAhqA/nj6/7UcHvAKfW6wvvUqHInlwBLvkAtcjP6zzTZf9Vr7f1AdOOBvHOH4mDMo6cGR9lghDg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Илья\\source\\repos\\HomeWork(With_List)\\HomeWork(With_List)\\HomeWork(With_List).fsproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Илья\\.nuget\\packages\\fsharp.core\\4.7.0\\fsharp.core.4.7.0.nupkg.sha512"
+  ],
+  "logs": []
+}
